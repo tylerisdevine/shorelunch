@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Favorite Recipes - ShoreLunch{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Favorite Recipes</h1>
+</div>
+
+{% if recipes %}
+    <div class="recipe-grid">
+        {% for recipe in recipes %}
+            <div class="recipe-card">
+                {% if recipe.photo_url %}
+                    <img src="{{ recipe.photo_url }}" alt="{{ recipe.title }}" class="recipe-image">
+                {% else %}
+                    <div class="recipe-image-placeholder">No Image</div>
+                {% endif %}
+
+                <div class="recipe-card-content">
+                    <h2><a href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}">{{ recipe.title }}</a></h2>
+
+                    {% if recipe.description %}
+                        <p class="recipe-description">{{ recipe.description[:100] }}{% if recipe.description|length > 100 %}...{% endif %}</p>
+                    {% endif %}
+
+                    <div class="recipe-meta">
+                        {% if recipe.total_time %}
+                            <span class="meta-item">Total: {{ recipe.total_time }} min</span>
+                        {% endif %}
+                        {% if recipe.servings %}
+                            <span class="meta-item">Servings: {{ recipe.servings }}</span>
+                        {% endif %}
+                        {% if recipe.average_rating %}
+                            <span class="meta-item">Rating: {{ "%.1f"|format(recipe.average_rating) }}/5</span>
+                        {% endif %}
+                    </div>
+
+                    {% if recipe.tags %}
+                        <div class="recipe-tags">
+                            {% for tag in recipe.tags[:3] %}
+                                <span class="tag">{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <p>No favorite recipes yet! Start marking recipes as favorites.</p>
+        <a href="{{ url_for('main.index') }}" class="btn btn-primary">Browse Recipes</a>
+    </div>
+{% endif %}
+{% endblock %}

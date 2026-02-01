@@ -1,0 +1,53 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: shorelunch_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - shorelunch_network
+
+  web:
+    build: .
+    container_name: shorelunch_web
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=${FLASK_ENV}
+      - SECRET_KEY=${SECRET_KEY}
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - ./app:/app/app
+      - ./uploads:/app/uploads
+      - ./config.py:/app/config.py
+      - ./run.py:/app/run.py
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - shorelunch_network
+
+volumes:
+  mysql_data:
+
+networks:
+  shorelunch_network:
+    driver: bridge

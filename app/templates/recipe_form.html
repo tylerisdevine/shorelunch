@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}{% if recipe %}Edit Recipe{% else %}New Recipe{% endif %} - ShoreLunch{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% if recipe %}Edit Recipe{% else %}Add New Recipe{% endif %}</h1>
+</div>
+
+<div class="form-container">
+    <form method="POST" enctype="multipart/form-data" class="recipe-form">
+        <div class="form-group">
+            <label for="title">Recipe Title *</label>
+            <input type="text" id="title" name="title" required
+                   value="{% if recipe %}{{ recipe.title }}{% endif %}"
+                   placeholder="e.g., Grandma's Chocolate Chip Cookies">
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3"
+                      placeholder="Brief description of the recipe">{% if recipe %}{{ recipe.description }}{% endif %}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="prep_time">Prep Time (minutes)</label>
+                <input type="number" id="prep_time" name="prep_time" min="0"
+                       value="{% if recipe %}{{ recipe.prep_time }}{% endif %}"
+                       placeholder="15">
+            </div>
+
+            <div class="form-group">
+                <label for="cook_time">Cook Time (minutes)</label>
+                <input type="number" id="cook_time" name="cook_time" min="0"
+                       value="{% if recipe %}{{ recipe.cook_time }}{% endif %}"
+                       placeholder="30">
+            </div>
+
+            <div class="form-group">
+                <label for="servings">Servings</label>
+                <input type="number" id="servings" name="servings" min="1"
+                       value="{% if recipe %}{{ recipe.servings }}{% endif %}"
+                       placeholder="4">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="ingredients">Ingredients *</label>
+            <textarea id="ingredients" name="ingredients" rows="8" required
+                      placeholder="Enter each ingredient on a new line:
+2 cups flour
+1 cup sugar
+2 eggs
+...">{% if recipe %}{{ recipe.ingredients }}{% endif %}</textarea>
+            <small>Enter each ingredient on a new line</small>
+        </div>
+
+        <div class="form-group">
+            <label for="instructions">Instructions *</label>
+            <textarea id="instructions" name="instructions" rows="10" required
+                      placeholder="Enter step-by-step instructions:
+1. Preheat oven to 350°F
+2. Mix dry ingredients...
+...">{% if recipe %}{{ recipe.instructions }}{% endif %}</textarea>
+            <small>Enter step-by-step instructions</small>
+        </div>
+
+        <div class="form-group">
+            <label for="photo">Recipe Photo</label>
+            <input type="file" id="photo" name="photo" accept="image/*">
+            {% if recipe and recipe.photo_url %}
+                <small>Current photo: <a href="{{ recipe.photo_url }}" target="_blank">View</a></small>
+            {% endif %}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                {% if recipe %}Update Recipe{% else %}Add Recipe{% endif %}
+            </button>
+            <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
