@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Tags - ShoreLunch{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>All Tags</h1>
+</div>
+
+{% if tags_with_counts %}
+    <div class="tags-grid">
+        {% for item in tags_with_counts %}
+            <a href="{{ url_for('main.search', tag=item.tag.name) }}" class="tag-card">
+                <h3 class="tag-name">{{ item.tag.name }}</h3>
+                <p class="tag-count">{{ item.count }} recipe{% if item.count != 1 %}s{% endif %}</p>
+            </a>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state">
+        <p>No tags yet! Tags will be created when you add them to recipes.</p>
+        <a href="{{ url_for('main.recipe_new') }}" class="btn btn-primary">Add Your First Recipe</a>
+    </div>
+{% endif %}
+{% endblock %}

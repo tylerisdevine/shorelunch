@@ -5,18 +5,19 @@
 {% block content %}
 <div class="page-header">
     <h1>All Recipes</h1>
-    <a href="{{ url_for('main.recipe_new') }}" class="btn btn-primary">Add New Recipe</a>
 </div>
 
 {% if recipes %}
     <div class="recipe-grid">
         {% for recipe in recipes %}
             <div class="recipe-card">
-                {% if recipe.photo_url %}
-                    <img src="{{ recipe.photo_url }}" alt="{{ recipe.title }}" class="recipe-image">
-                {% else %}
-                    <div class="recipe-image-placeholder">No Image</div>
-                {% endif %}
+                <a href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}" class="recipe-image-link">
+                    {% if recipe.photo_url %}
+                        <img src="{{ recipe.photo_url }}" alt="{{ recipe.title }}" class="recipe-image">
+                    {% else %}
+                        <div class="recipe-image-placeholder">No Image</div>
+                    {% endif %}
+                </a>
 
                 <div class="recipe-card-content">
                     <h2><a href="{{ url_for('main.recipe_detail', recipe_id=recipe.id) }}">{{ recipe.title }}</a></h2>
@@ -33,14 +34,14 @@
                             <span class="meta-item">Servings: {{ recipe.servings }}</span>
                         {% endif %}
                         {% if recipe.average_rating %}
-                            <span class="meta-item">Rating: {{ "%.1f"|format(recipe.average_rating) }}/5</span>
+                            <span class="meta-item">★ {{ "%.1f"|format(recipe.average_rating) }} ({{ recipe.ratings.count() }})</span>
                         {% endif %}
                     </div>
 
                     {% if recipe.tags %}
                         <div class="recipe-tags">
                             {% for tag in recipe.tags[:3] %}
-                                <span class="tag">{{ tag.name }}</span>
+                                <a href="{{ url_for('main.search', tag=tag.name) }}" class="tag">{{ tag.name }}</a>
                             {% endfor %}
                         </div>
                     {% endif %}

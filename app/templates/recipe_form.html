@@ -74,6 +74,14 @@
             {% endif %}
         </div>
 
+        <div class="form-group">
+            <label for="tags">Tags</label>
+            <input type="text" id="tags" name="tags"
+                   value="{% if recipe %}{% for tag in recipe.tags %}{{ tag.name }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}"
+                   placeholder="e.g., Italian, Dinner, Vegetarian, Quick & Easy">
+            <small>Enter tags separated by commas. Tags will be created automatically if they don't exist.</small>
+        </div>
+
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">
                 {% if recipe %}Update Recipe{% else %}Add Recipe{% endif %}

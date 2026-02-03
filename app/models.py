@@ -1,10 +1,12 @@
 from datetime import datetime
+
 from app import db
 
 
 class Recipe(db.Model):
     """Recipe model."""
-    __tablename__ = 'recipes'
+
+    __tablename__ = "recipes"
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
@@ -20,13 +22,21 @@ class Recipe(db.Model):
     last_made = db.Column(db.Date)
 
     # Relationships
-    tags = db.relationship('Tag', secondary='recipe_tags', backref=db.backref('recipes', lazy='dynamic'))
-    ratings = db.relationship('Rating', backref='recipe', lazy='dynamic', cascade='all, delete-orphan')
-    favorites = db.relationship('Favorite', backref='recipe', lazy='dynamic', cascade='all, delete-orphan')
-    want_to_cook = db.relationship('WantToCook', backref='recipe', lazy='dynamic', cascade='all, delete-orphan')
+    tags = db.relationship(
+        "Tag", secondary="recipe_tags", backref=db.backref("recipes", lazy="dynamic")
+    )
+    ratings = db.relationship(
+        "Rating", backref="recipe", lazy="dynamic", cascade="all, delete-orphan"
+    )
+    favorites = db.relationship(
+        "Favorite", backref="recipe", lazy="dynamic", cascade="all, delete-orphan"
+    )
+    want_to_cook = db.relationship(
+        "WantToCook", backref="recipe", lazy="dynamic", cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
-        return f'<Recipe {self.title}>'
+        return f"<Recipe {self.title}>"
 
     @property
     def total_time(self):
@@ -56,56 +66,61 @@ class Recipe(db.Model):
 
 class Tag(db.Model):
     """Tag model for categorizing recipes."""
-    __tablename__ = 'tags'
+
+    __tablename__ = "tags"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     category = db.Column(db.String(50))  # cuisine, meal_type, dietary, etc.
 
     def __repr__(self):
-        return f'<Tag {self.name}>'
+        return f"<Tag {self.name}>"
 
 
 # Association table for many-to-many relationship
-recipe_tags = db.Table('recipe_tags',
-    db.Column('recipe_id', db.Integer, db.ForeignKey('recipes.id'), primary_key=True),
-    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+recipe_tags = db.Table(
+    "recipe_tags",
+    db.Column("recipe_id", db.Integer, db.ForeignKey("recipes.id"), primary_key=True),
+    db.Column("tag_id", db.Integer, db.ForeignKey("tags.id"), primary_key=True),
 )
 
 
 class Rating(db.Model):
     """Rating model for recipe feedback."""
-    __tablename__ = 'ratings'
+
+    __tablename__ = "ratings"
 
     id = db.Column(db.Integer, primary_key=True)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipes.id"), nullable=False)
     rating = db.Column(db.Integer, nullable=False)  # 1-5 stars
     comment = db.Column(db.Text)
     rated_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return f'<Rating {self.rating} stars for Recipe {self.recipe_id}>'
+        return f"<Rating {self.rating} stars for Recipe {self.recipe_id}>"
 
 
 class Favorite(db.Model):
     """Favorite model for marking favorite recipes."""
-    __tablename__ = 'favorites'
+
+    __tablename__ = "favorites"
 
     id = db.Column(db.Integer, primary_key=True)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False, unique=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipes.id"), nullable=False, unique=True)
     added_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return f'<Favorite Recipe {self.recipe_id}>'
+        return f"<Favorite Recipe {self.recipe_id}>"
 
 
 class WantToCook(db.Model):
     """Want to cook list for meal planning."""
-    __tablename__ = 'want_to_cook'
+
+    __tablename__ = "want_to_cook"
 
     id = db.Column(db.Integer, primary_key=True)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False, unique=True)
+    recipe_id = db.Column(db.Integer, db.ForeignKey("recipes.id"), nullable=False, unique=True)
     added_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return f'<WantToCook Recipe {self.recipe_id}>'
+        return f"<WantToCook Recipe {self.recipe_id}>"
