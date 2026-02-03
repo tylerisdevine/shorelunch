@@ -11,8 +11,8 @@ class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text)
-    ingredients = db.Column(db.Text, nullable=False)
-    instructions = db.Column(db.Text, nullable=False)
+    ingredients = db.Column(db.Text)
+    instructions = db.Column(db.Text)
     prep_time = db.Column(db.Integer)  # in minutes
     cook_time = db.Column(db.Integer)  # in minutes
     servings = db.Column(db.Integer)

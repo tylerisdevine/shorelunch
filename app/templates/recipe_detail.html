@@ -65,6 +65,7 @@
     <div class="recipe-content">
         <div class="ingredients-section">
             <h2>Ingredients</h2>
+            {% if recipe.ingredients %}
             <div class="ingredients-list">
                 {% for line in recipe.ingredients.split('\n') %}
                     {% if line.strip() %}
@@ -72,10 +73,14 @@
                     {% endif %}
                 {% endfor %}
             </div>
+            {% else %}
+            <p class="empty-notice"><em>No ingredients added yet. <a href="{{ url_for('main.recipe_edit', recipe_id=recipe.id) }}">Add them now</a></em></p>
+            {% endif %}
         </div>
 
         <div class="instructions-section">
             <h2>Instructions</h2>
+            {% if recipe.instructions %}
             <div class="instructions-list">
                 {% for line in recipe.instructions.split('\n') %}
                     {% if line.strip() %}
@@ -83,6 +88,9 @@
                     {% endif %}
                 {% endfor %}
             </div>
+            {% else %}
+            <p class="empty-notice"><em>No instructions added yet. <a href="{{ url_for('main.recipe_edit', recipe_id=recipe.id) }}">Add them now</a></em></p>
+            {% endif %}
         </div>
     </div>
 

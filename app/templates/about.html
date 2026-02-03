@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}About - ShoreLunch{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>About ShoreLunch</h1>
+</div>
+
+<div class="about-content">
+    <p>ShoreLunch is a personal recipe management application designed to help you organize, discover, and cook your favorite meals.</p>
+
+    <p>The name comes from the tradition of "shore lunch" - cooking freshly caught fish right on the shoreline. It's about simple, satisfying food made with care.</p>
+
+    <h2>Features</h2>
+    <ul>
+        <li><strong>Recipe Management</strong> - Add, edit, and organize your recipes</li>
+        <li><strong>Quick Save</strong> - Save a recipe with just a name, fill in details later</li>
+        <li><strong>Favorites</strong> - Mark your favorite recipes for quick access</li>
+        <li><strong>Want to Cook</strong> - Keep a list of recipes you want to try</li>
+        <li><strong>Tags</strong> - Organize recipes with custom tags</li>
+        <li><strong>Ratings & Comments</strong> - Rate your recipes and add notes</li>
+        <li><strong>Search</strong> - Find recipes by name, ingredients, or tags</li>
+        <li><strong>Photo Upload</strong> - Add photos to your recipes</li>
+    </ul>
+
+    <h2>Getting Started</h2>
+    <p>Start by <a href="{{ url_for('main.recipe_new') }}">adding a new recipe</a>. You can add as much or as little detail as you want - even just a recipe name to fill in later!</p>
+
+    <h2>Open Source</h2>
+    <p>ShoreLunch is open source and available on <a href="https://github.com/tylerisdevine/shorelunch" target="_blank">GitHub</a>. Contributions and feedback are welcome!</p>
+
+    <h2>Feedback</h2>
+    <p>Have a suggestion or found a bug? <a href="{{ url_for('main.help') }}">Let us know!</a></p>
+</div>
+{% endblock %}

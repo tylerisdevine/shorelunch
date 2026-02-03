@@ -9,7 +9,7 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="{{ url_for('main.index') }}" class="logo">ShoreLunch</a>
+            <a href="{{ url_for('main.index') }}" class="logo" id="logo">ShoreLunch</a>
             <ul class="nav-menu">
                 <li><a href="{{ url_for('main.index') }}">All Recipes</a></li>
                 <li><a href="{{ url_for('main.recipe_new') }}">Add Recipe</a></li>
@@ -42,7 +42,45 @@
     <footer>
         <div class="container">
             <p>&copy; 2026 ShoreLunch Recipe Manager</p>
+            <p class="footer-links">
+                <a href="{{ url_for('main.about') }}">About</a>
+                <span class="footer-separator">|</span>
+                <a href="https://github.com/tylerisdevine/shorelunch" target="_blank">License</a>
+                <span class="footer-separator">|</span>
+                <a href="{{ url_for('main.help') }}">Help / Report Issue</a>
+            </p>
         </div>
     </footer>
+
+    <script>
+    // Triple-click on logo to access admin panel
+    (function() {
+        const logo = document.getElementById('logo');
+        const homeUrl = '{{ url_for("main.index") }}';
+        const adminUrl = '{{ url_for("main.admin") }}';
+        let clickCount = 0;
+        let clickTimer = null;
+
+        logo.addEventListener('click', function(e) {
+            e.preventDefault();
+            clickCount++;
+
+            if (clickTimer) {
+                clearTimeout(clickTimer);
+            }
+
+            if (clickCount === 3) {
+                clickCount = 0;
+                window.location.href = adminUrl;
+            } else {
+                clickTimer = setTimeout(function() {
+                    // Single or double click - go home
+                    window.location.href = homeUrl;
+                    clickCount = 0;
+                }, 400);
+            }
+        });
+    })();
+    </script>
 </body>
 </html>

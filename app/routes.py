@@ -279,3 +279,45 @@ def tags():
         count = tag.recipes.count()
         tags_with_counts.append({"tag": tag, "count": count})
     return render_template("tags.html", tags_with_counts=tags_with_counts)
+
+
+@bp.route("/about")
+def about():
+    """Display about page."""
+    return render_template("about.html")
+
+
+@bp.route("/help")
+def help():
+    """Display help/issue submission page."""
+    return render_template("help.html")
+
+
+@bp.route("/admin")
+def admin():
+    """Display admin panel for managing recipes and tags."""
+    recipes = Recipe.query.order_by(Recipe.created_at.desc()).all()
+    all_tags = Tag.query.order_by(Tag.name).all()
+    return render_template("admin.html", recipes=recipes, tags=all_tags)
+
+
+@bp.route("/admin/recipe/<int:recipe_id>/delete", methods=["POST"])
+def admin_delete_recipe(recipe_id):
+    """Delete a recipe from admin panel."""
+    recipe = Recipe.query.get_or_404(recipe_id)
+    title = recipe.title
+    db.session.delete(recipe)
+    db.session.commit()
+    flash(f"Recipe '{title}' deleted.", "success")
+    return redirect(url_for("main.admin"))
+
+
+@bp.route("/admin/tag/<int:tag_id>/delete", methods=["POST"])
+def admin_delete_tag(tag_id):
+    """Delete a tag from admin panel."""
+    tag = Tag.query.get_or_404(tag_id)
+    tag_name = tag.name
+    db.session.delete(tag)
+    db.session.commit()
+    flash(f"Tag '{tag_name}' deleted.", "success")
+    return redirect(url_for("main.admin"))
